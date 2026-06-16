@@ -1,17 +1,29 @@
-using System.Runtime.InteropServices;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-// In SDK-style projects such as this one, several assembly attributes that were historically
-// defined in this file are now automatically added during build and populated with
-// values defined in project properties. For details of which attributes are included
-// and how to customise this process see: https://aka.ms/assembly-info-properties
+namespace BudgetApp.Web.Models
+{
+    public class Expense
+    {
+        [Key]
+        public int Id { get; set; }
 
+        [Required(ErrorMessage = "Tytu³ wydatku jest wymagany")]
+        [StringLength(100)]
+        public string Title { get; set; } = string.Empty;
 
-// Setting ComVisible to false makes the types in this assembly not visible to COM
-// components.  If you need to access a type in this assembly from COM, set the ComVisible
-// attribute to true on that type.
+        [Required(ErrorMessage = "Kwota jest wymagana")]
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Amount { get; set; }
 
-[assembly: ComVisible(false)]
+        [Required]
+        public DateTime Date { get; set; } = DateTime.Now;
 
-// The following GUID is for the ID of the typelib if this project is exposed to COM.
+        // Relacja do Kategorii
+        [Required]
+        public int CategoryId { get; set; }
 
-[assembly: Guid("41127b31-eae2-4483-984c-ec77d39ca61e")]
+        [ForeignKey("CategoryId")]
+        public Category? Category { get; set; }
+    }
+}
