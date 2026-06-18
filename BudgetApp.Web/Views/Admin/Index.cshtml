@@ -1,0 +1,161 @@
+﻿@{
+    ViewData["Title"] = "Admin Panel";
+}
+
+<div class="container mt-4">
+    <h1 class="mb-4">Admin Dashboard</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-5">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Expenses</h5>
+                    <p class="card-text display-6">@ViewBag.TotalExpenses USD</p>
+                </div>
+            </div>
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Categories</h5>
+                    <p class="card-text display-6">@ViewBag.TotalCategories</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="card">
+                <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Expenses by Category</h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-secondary active" id="btnBar">Bar</button>
+                        <button type="button" class="btn btn-outline-secondary" id="btnPie">Pie</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div style="position: relative; height:280px;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Recent Expenses</h4>
+    <table class="table table-striped" id="expensesTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var expense in ViewBag.RecentExpenses)
+            {
+                <tr>
+                    <td>@expense.Title</td>
+                    <td class="expense-amount" data-amount="@expense.Amount">@expense.Amount USD</td>
+                    <td>@expense.Date.ToString("dd.MM.yyyy")</td>
+                    <td class="expense-category">@(expense.Category?.Name ?? "Uncategorized")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-primary me-2">Manage Categories</a>
+        <a asp-controller="Expenses" asp-action="Index" class="btn btn-outline-success">Manage Expenses</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoriesMap = {};
+
+            // Pobieranie danych z tabeli i sumowanie według kategorii
+            document.querySelectorAll("#expensesTable tbody tr").forEach(row => {
+                const categoryEl = row.querySelector(".expense-category");
+                const amountEl = row.querySelector(".expense-amount");
+
+                if (categoryEl && amountEl) {
+                    const category = categoryEl.textContent.trim();
+                    const amount = parseFloat(amountEl.getAttribute("data-amount").replace(',', '.'));
+
+                    if (!isNaN(amount)) {
+                        categoriesMap[category] = (categoriesMap[category] || 0) + amount;
+                    }
+                }
+            });
+
+            const labels = Object.keys(categoriesMap);
+            const dataValues = Object.values(categoriesMap);
+
+            const colors = [
+                'rgba(13, 110, 253, 0.7)', 'rgba(25, 135, 84, 0.7)',
+                'rgba(255, 193, 7, 0.7)', 'rgba(220, 53, 69, 0.7)',
+                'rgba(13, 202, 240, 0.7)', 'rgba(111, 66, 193, 0.7)'
+            ];
+            const borderColors = colors.map(c => c.replace('0.7', '1'));
+
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+            let currentType = 'bar';
+
+            let chartConfig = {
+                type: currentType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Expenses (USD)',
+                        data: dataValues,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderColor: borderColors.slice(0, labels.length),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            };
+
+            let myChart = new Chart(ctx, chartConfig);
+
+            const btnBar = document.getElementById('btnBar');
+            const btnPie = document.getElementById('btnPie');
+
+            function switchChartType(type) {
+                if (currentType === type) return;
+                currentType = type;
+
+                if (type === 'bar') {
+                    btnBar.classList.add('active');
+                    btnPie.classList.remove('active');
+                } else {
+                    btnBar.classList.remove('active');
+                    btnPie.classList.add('active');
+                }
+
+                myChart.destroy();
+                chartConfig.type = type;
+
+                if (type === 'pie') {
+                    chartConfig.options.plugins.legend.display = true;
+                    chartConfig.options.scales = {};
+                } else {
+                    chartConfig.options.plugins.legend.display = false;
+                    chartConfig.options.scales = { y: { beginAtZero: true } };
+                }
+
+                myChart = new Chart(ctx, chartConfig);
+            }
+
+            btnBar.addEventListener('click', () => switchChartType('bar'));
+            btnPie.addEventListener('click', () => switchChartType('pie'));
+        });
+    </script>
+}
