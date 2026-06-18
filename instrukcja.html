@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Instrukcja Użytkownika - BudgetApp.Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #1a365d;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+        }
+        h1 { margin: 0; font-size: 24px; }
+        h2 { color: #2c5282; border-bottom: 2px solid #2c5282; padding-bottom: 5px; margin-top: 30px; }
+        h3 { color: #4a5568; }
+        .important {
+            background-color: #ebf8ff;
+            border-left: 4px solid #3182ce;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .img-container {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        .img-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #eee;
+        }
+        .img-label {
+            display: block;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Instrukcja Obsługi Użytkownika</h1>
+        <p style="margin: 5px 0 0 0; opacity: 0.8;">System Zarządzania Budżetem Osobistym - BudgetApp.Web</p>
+    </div>
+
+    <p>Krótki przewodnik opisujący poruszanie się po aplikacji, logowanie oraz obsługę wykresów finansowych.</p>
+
+    <h2>1. Strona główna</h2>
+    <p>Po uruchomieniu programu zobaczysz stronę główną z górnym paskiem nawigacyjnym. Aby przejść do zarządzania aplikacją, kliknij przycisk <strong>Zaloguj</strong> w prawym górnym rogu.</p>
+    
+    <div class="img-container">
+        <img src="strona_powitalna.jpg" alt="Strona główna">
+        <span class="img-label">Rysunek 1: Widok strony głównej aplikacji</span>
+    </div>
+
+    <h2>2. Logowanie administratora</h2>
+    <p>Dostęp do panelu zarządcy wymaga podania danych logowania. System tworzy konto automatycznie przy pierwszym starcie.</p>
+    
+    <div class="important">
+        <strong>Dane logowania:</strong><br>
+        • Login (Email): admin@budgetapp.pl<br>
+        • Hasło: Admin123!
+    </div>
+
+    <div class="img-container">
+        <img src="formularz_logowania.jpg" alt="Ekran logowania">
+        <span class="img-label">Rysunek 2: Formularz logowania do systemu</span>
+    </div>
+
+    <h2>3. Obsługa Dashboardu i wykresów</h2>
+    <p>Po zalogowaniu trafisz do Panelu Administratora. Zobaczysz tu podsumowanie swoich finansów, tabelę oraz interaktywny wykres.</p>
+    
+    <h3>Customizacja (zmiana) wykresu:</h3>
+    <p>Nad wykresem znajdziesz przyciski kontrolne. Kliknięcie odpowiedniego przycisku natychmiast zmienia typ wykresu w przeglądarce:</p>
+    <ul>
+        <li><strong>Wykres Słupkowy:</strong> Pokazuje dane w formie pionowych kolumn.</li>
+        <li><strong>Wykres Kołowy:</strong> Przedstawia procentowy udział każdej kategorii w budżecie.</li>
+    </ul>
+
+    <div class="img-container">
+        <img src="panel_admin.jpg" alt="Panel administratora">
+        <span class="img-label">Rysunek 3: Panel główny z wykresem struktury wydatków</span>
+    </div>
+
+    <h2>4. Dodawanie i edycja danych (CRUD)</h2>
+    <ul>
+        <li><strong>Dodawanie:</strong> W zakładce Wydatki kliknij "Dodaj nowy", wypełnij formularz i zapisz. Wykres zaktualizuje się automatycznie.</li>
+        <li><strong>Edycja / Usuwanie:</strong> Użyj przycisków akcji bezpośrednio w tabeli przy wybranym wierszu, aby zmienić dane lub trwale usunąć wpis z bazy.</li>
+    </ul>
+
+</body>
+</html>
